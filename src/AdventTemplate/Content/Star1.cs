@@ -1,21 +1,29 @@
 using DanielCarey;
 using System.Numerics;
 
-namespace DanielCarey.AdventTemplate;
+namespace DanielCarey.DanielCarey.AdventTemplate;
 
-public class Star1
+public class Star1(ILogger<Star1> logger) : IStar
 {
+    public string Name { get => "DanielCarey.AdventTemplate.Star1"; }
+
     record Data(BigInteger Num1, BigInteger Num2);
 
-    public async ValueTask RunAsync()
+    public ValueTask RunAsync()
     {
-        var records = File.ReadAllText("Data1.txt")
+        logger.LogInformation($"{Name}.RunAsync");
+
+        // Extract Data
+        var records = File
+            .ReadAllText("Data1.txt")
             .LoadRecords(fields
                 => new Data(BigInteger.Parse(fields[0]), BigInteger.Parse(fields[1]))
             );
 
+        // Process Data
 
 
         WriteLine("Done");
+        return ValueTask.CompletedTask;
     }
 }

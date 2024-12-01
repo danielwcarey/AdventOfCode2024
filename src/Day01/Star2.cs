@@ -1,15 +1,21 @@
 ﻿using System.Numerics;
 
-using DanielCarey;
+using Microsoft.Extensions.Logging;
 
-namespace Day01;
-public class Star2
+namespace DanielCarey.Day01;
+
+public class Star2(ILogger<Star2> logger) : IStar
 {
+    public string Name { get => "Day01.Star2"; }
+
     record Data(BigInteger Num1, BigInteger Num2);
 
-    public async ValueTask RunAsync()
+    public ValueTask RunAsync()
     {
-        var records = File.ReadAllText("Data2.txt")
+        logger.LogInformation($"{Name}.RunAsync");
+
+        var records = File
+            .ReadAllText("Data2.txt")
             .LoadRecords(fields 
                 => new Data(BigInteger.Parse(fields[0]), BigInteger.Parse(fields[1]))
             );
@@ -28,6 +34,7 @@ public class Star2
             score += (record.Num1 * multiply);
         }
 
-        WriteLine(score);
+        WriteLine($"Solution: {score}");
+        return ValueTask.CompletedTask;
     }
 }

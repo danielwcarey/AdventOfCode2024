@@ -1,15 +1,21 @@
-﻿using DanielCarey;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace Day01;
+using Microsoft.Extensions.Logging;
 
-public class Star1
+namespace DanielCarey.Day01;
+
+public class Star1(ILogger<Star1> logger) : IStar
 {
+    public string Name { get => "Day01.Star1"; }
+
     record Data(BigInteger Num1, BigInteger Num2);
 
-    public async ValueTask RunAsync()
+    public ValueTask RunAsync()
     {
-        var records = File.ReadAllText("Data1.txt")
+        logger.LogInformation($"{Name}.RunAsync");
+
+        var records = File
+            .ReadAllText("Data1.txt")
             .LoadRecords(fields
                 => new Data(BigInteger.Parse(fields[0]), BigInteger.Parse(fields[1]))
             );
@@ -23,6 +29,7 @@ public class Star1
             counter += BigInteger.Abs(sortedList1[index] - sortedList2[index]);
         }
 
-        WriteLine(counter);
+        WriteLine($"Solution: {counter}");
+        return ValueTask.CompletedTask;
     }
 }

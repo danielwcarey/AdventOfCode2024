@@ -1,7 +1,3 @@
-﻿using Day01;
+﻿using DanielCarey.Day01;
 
-var star = new Star1(); // 2430334
-//var star = new Star2(); // 28786472
-
-await star.RunAsync();
-
+await DanielCarey.Shared.Program.RunAsync<Star1, Star2>();

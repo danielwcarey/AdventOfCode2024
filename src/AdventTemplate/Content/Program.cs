@@ -1,7 +1,4 @@
-using DanielCarey.AdventTemplate;
+using DanielCarey.DanielCarey.AdventTemplate;
 
-var star = new Star1(); // ????
-//var star = new Star2(); // ????
-
-await star.RunAsync();
+await DanielCarey.Shared.Program.RunAsync<Star1, Star2>();
 
