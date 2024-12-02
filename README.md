@@ -1,4 +1,4 @@
-# AdventOfCode2024
+﻿# AdventOfCode2024
 
 My Advent of Code 2024 workspace.
 
@@ -52,6 +52,75 @@ adds the project to the solution.
 ```powershell
 .\Add-DayNumber.ps1 03
 ```
+
+### Solution folder structure
+
+Each event day, I'll create a new project that represents that days'
+challenge. It will appear in the .\src\DayXX folder. The daily projects' reference
+the Shared library. 
+
+The goal is to quickly start solving the problem by editing
+the IStar methods for Star1 and Star2,
+```csharp
+public ValueTask RunAsync()
+```
+
+The Shared library 
+    * Program - creates the Host application and registers services including the StarHostedService
+    * The StarHostedService starts the main menu, execute implementation loop.
+
+```
+.
+├── Add-DayNumber.ps1
+├── AdventOfCode2024.sln
+├── AdventOfCode2024.sln.DotSettings.user
+├── Install-Template.ps1
+├── LICENSE.txt
+├── README.md
+├── Uninstall-Template.ps1
+├── docs
+│   └── images
+└── src
+    ├── AdventTemplate
+    │   └── Content
+    │       ├── DanielCarey.AdventTemplate.csproj
+    │       ├── Data1.txt
+    │       ├── Data2.txt
+    │       ├── Program.cs
+    │       ├── Star1.cs
+    │       └── Star2.cs
+    ├── Day01
+    │   ├── Data1.txt
+    │   ├── Data2.txt
+    │   ├── Day01.csproj
+    │   ├── Program.cs
+    │   ├── Star1.cs
+    │   └── Star2.cs
+    └── Shared
+        ├── Extensions.cs
+        ├── IStar.cs
+        ├── Program.cs
+        ├── README.md
+        ├── Shared.csproj
+        └── StarHostedService.cs
+```
+
+### Solving the problem
+
+#### Running the project
+
+Each day can be ran by selecting the project. After running the 
+project, you can select the star (1 or 2) to solve.
+
+![Visual Studio Run]( ./docs/images/vs_run.png )
+
+#### The menu loop
+
+The menu runs in a loop. Pressing 1 will run the code for solving Star1
+and pressing 2 will run the code for solving Star2. Any other key
+will terminate execution.
+
+![menu]( ./docs/images/menu.png )
 
 **Happy Coding**
 
