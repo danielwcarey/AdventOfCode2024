@@ -1,9 +1,9 @@
-﻿# AdventOfCode2024
+﻿# [AdventOfCode2024]( https://adventofcode.com/2024 )
 
 My Advent of Code 2024 workspace.
 
 This project is **NOT** production-grade and should be treated as a playground. I normally participate
-in the Advent of Code using [LINQPad snippets]( https://www.linqpad.net/ ) but wanted to share 
+in the Advent of Code using [LINQPad]( https://www.linqpad.net/ ) snippets but wanted to share 
 with a broader group.
 
 

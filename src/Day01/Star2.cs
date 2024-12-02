@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
 
-using Microsoft.Extensions.Logging;
-
 namespace DanielCarey.Day01;
 
 public class Star2(ILogger<Star2> logger) : IStar
@@ -12,7 +10,7 @@ public class Star2(ILogger<Star2> logger) : IStar
 
     public ValueTask RunAsync()
     {
-        logger.LogInformation($"{Name}.RunAsync");
+        logger.LogInformation($"RunAsync");
 
         var records = 
             FileReadAllLines("Data2.txt")

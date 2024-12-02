@@ -11,7 +11,7 @@ public class Star2(ILogger<Star2> logger) : IStar
 
     public ValueTask RunAsync()
     {
-        logger.LogInformation($"{Name}.RunAsync");
+        logger.LogInformation($"RunAsync");
 
         // Extract Data
         var records =

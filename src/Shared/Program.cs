@@ -15,6 +15,7 @@ public static class Program
             {
                 config.AddConsole();
                 config.AddDebug();
+                
             });
 
         builder.Services.AddHostedService<StarHostedService>();

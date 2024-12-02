@@ -10,7 +10,7 @@ public class Star1(ILogger<Star1> logger) : IStar
 
     public ValueTask RunAsync()
     {
-        logger.LogInformation($"{Name}.RunAsync");
+        logger.LogInformation($"RunAsync");
 
         var records =
             FileReadAllLines("Data1.txt")
