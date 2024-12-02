@@ -14,8 +14,8 @@ public class Star2(ILogger<Star2> logger) : IStar
     {
         logger.LogInformation($"{Name}.RunAsync");
 
-        var records = File
-            .ReadAllText("Data2.txt")
+        var records = 
+            FileReadAllLines("Data2.txt")
             .LoadRecords(fields 
                 => new Data(BigInteger.Parse(fields[0]), BigInteger.Parse(fields[1]))
             );

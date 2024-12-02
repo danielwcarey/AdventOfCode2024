@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
 
-using Microsoft.Extensions.Logging;
-
 namespace DanielCarey.Day01;
 
 public class Star1(ILogger<Star1> logger) : IStar
@@ -14,8 +12,8 @@ public class Star1(ILogger<Star1> logger) : IStar
     {
         logger.LogInformation($"{Name}.RunAsync");
 
-        var records = File
-            .ReadAllText("Data1.txt")
+        var records =
+            FileReadAllLines("Data1.txt")
             .LoadRecords(fields
                 => new Data(BigInteger.Parse(fields[0]), BigInteger.Parse(fields[1]))
             );

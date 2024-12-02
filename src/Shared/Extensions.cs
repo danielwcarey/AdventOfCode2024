@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace DanielCarey.Shared;
 
@@ -9,16 +10,22 @@ public static class Extensions
 
     // Load records from space delimited text
     public static List<TRecord> LoadRecords<TRecord>(
-        this string text,
+        this Dictionary<BigInteger, string> data,
         Func<string[], TRecord> fieldsToRecord)
     {
-        return text
-            .Split("\n", StringSplitOptions.RemoveEmptyEntries)
+        return data
+            .Select(item => item.Value)
             .Select(line => FixSpaces.Replace(line, " "))
-            .Select((line, index) => fieldsToRecord(line.Split(" ")))
+            .Select(line => fieldsToRecord(line.Split(" ")))
             .ToList(); // lines
     }
 
-    
+    public static Dictionary<BigInteger, string> FileReadAllLines(string filename)
+    {
+        return File
+            .ReadAllLines(filename)
+            .Select((line, index) => (Index: index, Line: line))
+            .ToDictionary(item => new BigInteger(item.Index), item => item.Line);
+    }
 }
 

@@ -5,7 +5,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>DanielCarey.AdventTemplate</RootNamespace>
+        <RootNamespace>DanielCarey.DanielCarey.AdventTemplate</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -29,6 +29,7 @@
     <ItemGroup>
         <Using Include="System.Console" Static="true" />
         <Using Include="DanielCarey.Shared"/>
+        <Using Include="DanielCarey.Shared.Extensions" Static="true"/>
         <Using Include="Microsoft.Extensions.Logging" />
     </ItemGroup>
 

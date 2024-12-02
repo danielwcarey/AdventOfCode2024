@@ -1,6 +1,6 @@
-using DanielCarey;
 using System.Numerics;
 
+// ReSharper disable once CheckNamespace
 namespace DanielCarey.DanielCarey.AdventTemplate;
 
 public class Star1(ILogger<Star1> logger) : IStar
@@ -14,8 +14,8 @@ public class Star1(ILogger<Star1> logger) : IStar
         logger.LogInformation($"{Name}.RunAsync");
 
         // Extract Data
-        var records = File
-            .ReadAllText("Data1.txt")
+        var records =
+            FileReadAllLines("Data1.txt")
             .LoadRecords(fields
                 => new Data(BigInteger.Parse(fields[0]), BigInteger.Parse(fields[1]))
             );
