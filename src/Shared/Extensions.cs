@@ -32,7 +32,5 @@ public static class Extensions
     public static List<BigInteger> ToBigIntegerList(string[] items) 
         => items.Select(BigInteger.Parse).ToList();
     
-
-
 }
 
