@@ -29,8 +29,31 @@ public static class Extensions
             .ToList(); // lines
     }
 
-    public static List<BigInteger> ToBigIntegerList(string[] items) 
+    public static List<BigInteger> ToBigIntegerList(string[] items)
         => items.Select(BigInteger.Parse).ToList();
-    
+
+    // Modified code based on initial answer to ChatGPT 4o question:
+    //   give me a c# expression to generate every permutation of the 
+    //   following code snippet. I want to use the Array literals: 
+    //   List<int> items = [1, 3, 5, 8, 9, 11];
+    public static IEnumerable<IEnumerable<TElement>> Permutations<TElement>(this IEnumerable<TElement> sequence)
+    {
+        IEnumerable<TElement> enumerable = sequence.ToList();
+
+        if (!enumerable.Any())
+        {
+            return [[]];
+        }
+
+        return enumerable
+            .SelectMany((x, i)  // collapse the internal Select to a single list here. also include the index
+                => Permutations(
+                        enumerable
+                            .Take(i)
+                            .Concat(enumerable.Skip(i + 1))
+                        )
+                    .Select(p => p.Prepend(x))
+            );
+    }
 }
 
