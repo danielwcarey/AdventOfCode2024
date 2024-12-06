@@ -69,19 +69,24 @@ public class Star1(ILogger<Star1> logger) : IStar
         {
             // given an item in the update list
             var item = update[index];
+
+            // get numbers that cannot be to the left of item
             var cannotBeLeft = rules
                 .Where(rule => rule.Num1 == item)
                 .Select(rule => rule.Num2);
 
+            // if there are any numbers, that is an error
+            var cannotBeLeftError = update[..index].Intersect(cannotBeLeft).Any();
+
+            // get numbers that cannot be to the right of item
             var cannotBeRight = rules
                 .Where(rule => rule.Num2 == item)
                 .Select(rule => rule.Num1);
 
-            var isError =
-                update[..index].Intersect(cannotBeLeft).Any()
-                || update[index..].Intersect(cannotBeRight).Any();
+            // if there are any numbers, that is an error
+            var cannotBeRightError = update[index..].Intersect(cannotBeRight).Any();
 
-            if (isError) return false;
+            if (cannotBeLeftError || cannotBeRightError) return false;
         }
         return true;
     }

@@ -1,5 +1,7 @@
 using System.Numerics;
 
+//using UpdateList = System.Collections.Generic.List<System.Numerics.BigInteger>; // List<BigInteger>
+
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day05;
 
@@ -11,13 +13,11 @@ public class Star2(ILogger<Star2> logger) : IStar
 
     public ValueTask RunAsync()
     {
-        throw new NotImplementedException();
-
         logger.LogInformation($"RunAsync");
 
         // Extract Data
         var allLines = File
-            .ReadAllLines("Data1.txt")
+            .ReadAllLines("Data2.txt")
             .ToList();
 
         var rules = allLines
@@ -33,7 +33,9 @@ public class Star2(ILogger<Star2> logger) : IStar
 
         // Process Data
         var middleNumberList = updates
-            .Select(update => CorrectedUpdate(update, rules)) // filter correct lines
+            .Where(update => !IsCorrect(update, rules)) // filter incorrect lines
+            .Select(update => FixUpdateList(update, rules))
+            .Where(update => update.Count > 0)
             .Select(update => update[update.Count / 2])
             .ToList();
 
@@ -43,10 +45,11 @@ public class Star2(ILogger<Star2> logger) : IStar
             answer = BigInteger.Add(answer, number);
         }
 
+        // 6142
         WriteLine($"Answer: {answer}");
         return ValueTask.CompletedTask;
     }
-    
+
     private Rule ParseRule(string line)
     {
         var parts = line.Split("|");
@@ -64,32 +67,55 @@ public class Star2(ILogger<Star2> logger) : IStar
             .ToList();
     }
 
-    private List<BigInteger> CorrectedUpdate(List<BigInteger> update, List<Rule> rules)
+    private bool IsCorrect(List<BigInteger> update, List<Rule> rules)
     {
-        List<int> errorIndex = new();
-        
         for (var index = 0; index < update.Count; index++)
         {
             // given an item in the update list
             var item = update[index];
+
+            // get numbers that cannot be to the left of item
             var cannotBeLeft = rules
                 .Where(rule => rule.Num1 == item)
                 .Select(rule => rule.Num2);
 
+            // if there are any numbers, that is an error
+            var cannotBeLeftError = update[..index].Intersect(cannotBeLeft).Any();
+
+            // get numbers that cannot be to the right of item
             var cannotBeRight = rules
                 .Where(rule => rule.Num2 == item)
                 .Select(rule => rule.Num1);
 
-            var isError =
-                update[..index].Intersect(cannotBeLeft).Any()
-                || update[index..].Intersect(cannotBeRight).Any();
+            // if there are any numbers, that is an error
+            var cannotBeRightError = update[index..].Intersect(cannotBeRight).Any();
 
-            if (isError) errorIndex.Add(index);
+            if (cannotBeLeftError || cannotBeRightError) return false;
+        }
+        return true;
+    }
+
+    private List<BigInteger> FixUpdateList(List<BigInteger> updateList, List<Rule> rules)
+    {
+        var orderedList = new System.Collections.Generic.SortedSet<BigInteger>(new BigIntegerComparer(rules));
+
+        foreach (var item in updateList)
+        {
+            orderedList.Add(item);
         }
 
-        if(errorIndex.Count == 0) return [];
-
-        // TBD - permutations based on index of errors ?
-        return [];
+        return orderedList.ToList();
     }
+
+    class BigIntegerComparer(List<Rule> rules) : IComparer<BigInteger>
+    {
+        public int Compare(BigInteger num1, BigInteger num2)
+        {
+            if (rules.Contains(new Rule(num1, num2))) return -1;
+            if (rules.Contains(new Rule(num2, num1))) return 1;
+
+            return 0;
+        }
+    }
+
 }
