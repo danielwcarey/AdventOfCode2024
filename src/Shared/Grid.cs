@@ -39,6 +39,21 @@ public class Grid<TCell> where TCell : IComparable<TCell>
         return item.CompareTo(value) == 0;
     }
 
+
+    // search but provide a function that indicates if we can stop searching
+    public IEnumerable<(BigInteger Row, BigInteger Column, TCell Value)> Select()
+    {
+        for (BigInteger row = 0; row < Rows; row++)
+        {
+            for (BigInteger column = 0; column < Columns; column++)
+            {
+                TCell? value = this[row, column];
+
+                if(value is not null) yield return (Row: row, Column: column, Value: value);
+            }
+        }
+    }
+
     public static Grid<string> CreateFromText(string text)
     {
         var lines = text.Split(["\r\n"], StringSplitOptions.None);
