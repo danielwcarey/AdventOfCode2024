@@ -1,9 +1,4 @@
-using System.Collections.Concurrent;
-using System.Data;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Numerics;
-using System.Security.Cryptography;
 
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day06;
@@ -12,7 +7,9 @@ public class Star1(ILogger<Star1> logger) : IStar
 {
     public string Name { get => "Day06.Star1"; }
 
-    record Guard(string Symbol, BigInteger Row, BigInteger Column);
+    record Location(BigInteger Row, BigInteger Column);
+
+    record Guard(string Symbol, Location Location);
 
     public ValueTask RunAsync()
     {
@@ -24,57 +21,63 @@ public class Star1(ILogger<Star1> logger) : IStar
         // guard direction + actions
         List<Guard> guardActions =
         [
-            new("^", -1, 0),
-            new(">", 0, 1),
-            new("v", 1, 0),
-            new("<", 0, -1)
+            new("^", new(-1, 0) ),
+            new(">", new (0, 1) ),
+            new("v", new(1, 0) ),
+            new("<", new(0, -1) )
         ];
 
         // get guard
         Guard? guard = map
             .Select() // iterate the map
             .Where(cell => guardActions.Select(g => g.Symbol).Contains(cell.Value)) // find a cell with a guard symbol
-            .Select(cell => new Guard(cell.Value, cell.Row, cell.Column)) // create the guard object
+            .Select(cell => new Guard(cell.Value, new(cell.Row, cell.Column))) // create the guard object
             .FirstOrDefault();
 
         if (guard is null) throw new Exception("Cannot find the guard");
 
         // Process Data
-        List<(BigInteger, BigInteger)> traveled = new();
+        List<Location> guardHistory = new();
         bool guardInArea = true;
-        traveled.Add((guard.Row, guard.Column));
+        guardHistory.Add(new(guard.Location.Row, guard.Location.Column));
 
         do
         {
-            var guardAction = guardActions.Where(action => action.Symbol == guard.Symbol).First();
+            var guardAction = guardActions
+                .First(action => action.Symbol == guard.Symbol);
+
             var nextLocation = (
-                Row: guard.Row + guardAction.Row, 
-                Column: guard.Column + guardAction.Column);
+                Row: guard.Location.Row + guardAction.Location.Row,
+                Column: guard.Location.Column + guardAction.Location.Column);
 
             if (map[nextLocation.Row, nextLocation.Column] == "#")
             {
-                guard = guard with {Symbol = TurnSymbol(guard.Symbol)};
+                guard = guard with { Symbol = TurnSymbol(guard.Symbol) };
                 continue;
             }
-            
-            guard = guard with {Row = nextLocation.Row, Column = nextLocation.Column };
 
-            guardInArea = (guard.Row >= 0 && guard.Row < map.Rows)
-                          && (guard.Column >= 0 && guard.Column < map.Columns);
+            guard = guard with { Location = new(nextLocation.Row, nextLocation.Column) };
 
-            // TBD: need to find something other than List<T> that only adds if doesn't exist
+            // determine if the guard is still in the grid
+            guardInArea =
+                guard.Location.Row >= 0
+                && guard.Location.Row < map.Rows
+                && guard.Location.Column >= 0
+                && guard.Location.Column < map.Columns;
+
             if (guardInArea)
             {
-                if (!traveled.Contains((guard.Row, guard.Column))) // don't recount 
+                Location location = new(guard.Location.Row, guard.Location.Column);
+                if (!guardHistory.Contains(location)) // don't recount 
                 {
-                    traveled.Add( (guard.Row, guard.Column) );
+                    guardHistory.Add(location);
                 }
             }
 
         } while (guardInArea);
 
         // 4982
-        WriteLine($"Answer: {traveled.Count}");
+        WriteLine($"Answer: {guardHistory.Count}");
         return ValueTask.CompletedTask;
     }
 
