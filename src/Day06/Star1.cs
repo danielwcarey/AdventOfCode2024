@@ -3,7 +3,7 @@ using System.Numerics;
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day06;
 
-public class Star1(ILogger<Star1> logger) : IStar
+public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 {
     public string Name { get => "Day06.Star1"; }
 
@@ -11,12 +11,12 @@ public class Star1(ILogger<Star1> logger) : IStar
 
     record Guard(string Symbol, Location Location);
 
-    public ValueTask RunAsync()
+    public ValueTask<BigInteger> RunAsync()
     {
         logger.LogInformation($"RunAsync");
 
         // Extract Data
-        var map = Grid<string>.CreateFromText(File.ReadAllText("Data1.txt"));
+        var map = Grid<string>.CreateFromText(File.ReadAllText(dataPath));
 
         // guard direction + actions
         List<Guard> guardActions =
@@ -78,7 +78,7 @@ public class Star1(ILogger<Star1> logger) : IStar
 
         // 4982
         WriteLine($"Answer: {guardHistory.Count}");
-        return ValueTask.CompletedTask;
+        return ValueTask.FromResult(new BigInteger(guardHistory.Count));
     }
 
     string TurnSymbol(string currentSymbol)

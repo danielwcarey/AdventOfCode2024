@@ -28,8 +28,8 @@
 
     <ItemGroup>
         <Using Include="System.Console" Static="true" />
-        <Using Include="DanielCarey.Shared"/>
-        <Using Include="DanielCarey.Shared.Extensions" Static="true"/>
+        <Using Include="DanielCarey.Shared" />
+        <Using Include="DanielCarey.Shared.Extensions" Static="true" />
         <Using Include="Microsoft.Extensions.Logging" />
     </ItemGroup>
 

@@ -3,19 +3,19 @@ using System.Numerics;
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day05;
 
-public class Star1(ILogger<Star1> logger) : IStar
+public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 {
     public string Name { get => "Day05.Star1"; }
 
     record Rule(BigInteger Num1, BigInteger Num2);
 
-    public ValueTask RunAsync()
+    public ValueTask<BigInteger> RunAsync()
     {
         logger.LogInformation($"RunAsync");
 
         // Extract Data
         var allLines = File
-            .ReadAllLines("Data1.txt")
+            .ReadAllLines(dataPath)
             .ToList();
 
         var rules = allLines
@@ -43,7 +43,7 @@ public class Star1(ILogger<Star1> logger) : IStar
 
         // 5391
         WriteLine($"Answer: {answer}");
-        return ValueTask.CompletedTask;
+        return ValueTask.FromResult(answer);
     }
 
     private Rule ParseRule(string line)

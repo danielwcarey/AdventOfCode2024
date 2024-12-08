@@ -3,17 +3,17 @@ using System.Numerics;
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day07;
 
-public class Star2(ILogger<Star2> logger) : IStar
+public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
 {
     public string Name { get => "Day07.Star2"; }
 
-    public ValueTask RunAsync()
+    public ValueTask<BigInteger> RunAsync()
     {
         logger.LogInformation($"RunAsync");
 
         // Extract Data
         var equations = File
-            .ReadLines("Data2.txt")
+            .ReadLines(dataPath)
             .Select(line => line.Split(":", StringSplitOptions.TrimEntries))
             .Select(item => new Equation(
                     Value: BigInteger.Parse(item[0]),
@@ -38,7 +38,7 @@ public class Star2(ILogger<Star2> logger) : IStar
 
         // 354060705047464
         WriteLine($"Answer:{answer}");
-        return ValueTask.CompletedTask;
+        return ValueTask.FromResult(answer);
     }
 
     record Equation(BigInteger Value, List<BigInteger> Numbers);

@@ -3,23 +3,23 @@ using System.Numerics;
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day02;
 
-public class Star1(ILogger<Star1> logger) : IStar
+public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 {
     public string Name { get => "Day02.Star1"; }
 
-    public ValueTask RunAsync()
+    public ValueTask<BigInteger> RunAsync()
     {
         logger.LogInformation($"RunAsync");
 
         var reports =
-            FileReadAllLines("Data1.txt")
+            FileReadAllLines(dataPath)
             .LoadRecords(ToBigIntegerList);
 
         // Process Data
-        var safeReportCount = reports.Where(IsSafe).Count();
+        BigInteger answer = reports.Where(IsSafe).Count();
 
-        WriteLine($"Safe Report Count: {safeReportCount}");
-        return ValueTask.CompletedTask;
+        WriteLine($"Safe Report Count: {answer}");
+        return ValueTask.FromResult(answer);
     }
 
     internal bool IsSafe(List<BigInteger> levels)

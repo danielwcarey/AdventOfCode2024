@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day06;
 
-public class Star2(ILogger<Star2> logger) : IStar
+public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
 {
     public string Name { get => "Day06.Star2"; }
 
@@ -16,7 +16,7 @@ public class Star2(ILogger<Star2> logger) : IStar
 
     record Corner(string Name, Location Location); // tl:=top lef, tr:=top right, bl:=bottom left, br:=bootm right
 
-    public ValueTask RunAsync()
+    public ValueTask<BigInteger> RunAsync()
     {
         logger.LogInformation($"RunAsync");
 
@@ -25,7 +25,7 @@ public class Star2(ILogger<Star2> logger) : IStar
         throw new Exception("HAVE NOT SOLVED");
 
         // Extract Data
-        var map = Grid<string>.CreateFromText(File.ReadAllText("Data1.txt"));
+        var map = Grid<string>.CreateFromText(File.ReadAllText(dataPath));
 
         // guard direction + actions
         List<Guard> guardActions =
@@ -118,7 +118,7 @@ public class Star2(ILogger<Star2> logger) : IStar
         
 
         WriteLine($"Answer: {guardHistory.Count}");
-        return ValueTask.CompletedTask;
+        return ValueTask.FromResult(new BigInteger(guardHistory.Count));
     }
 
     string TurnSymbol(string currentSymbol)

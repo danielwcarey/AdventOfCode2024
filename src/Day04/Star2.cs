@@ -3,22 +3,22 @@ using System.Numerics;
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day04;
 
-public class Star2(ILogger<Star2> logger) : IStar
+public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
 {
     public string Name { get => "Day04.Star2"; }
 
     record Data(BigInteger Num1, BigInteger Num2);
 
-    public ValueTask RunAsync()
+    public ValueTask<BigInteger> RunAsync()
     {
         logger.LogInformation($"RunAsync");
 
         // Extract Data
-        var grid = Grid<string>.CreateFromText(File.ReadAllText("Data2.txt"));
+        var grid = Grid<string>.CreateFromText(File.ReadAllText(dataPath));
 
         // Process Data
 
-        BigInteger foundWords = 0;
+        BigInteger answer = 0;
 
         for (var row = 0; row < grid.Rows; row++)
         {
@@ -39,13 +39,13 @@ public class Star2(ILogger<Star2> logger) : IStar
 
                 if (angle1 && angle2)
                 {
-                    foundWords += 1;
+                    answer += 1;
                 }
             }
         }
         // 1960
-        WriteLine($"Answer: {foundWords}");
-        return ValueTask.CompletedTask;
+        WriteLine($"Answer: {answer}");
+        return ValueTask.FromResult(answer);
 
     }
 }

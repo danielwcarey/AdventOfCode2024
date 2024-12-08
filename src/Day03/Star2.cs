@@ -4,18 +4,18 @@ using System.Text.RegularExpressions;
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day03;
 
-public class Star2(ILogger<Star2> logger) : IStar
+public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
 {
     public string Name { get => "Day03.Star2"; }
 
  
-    public ValueTask RunAsync()
+    public ValueTask<BigInteger> RunAsync()
     {
         logger.LogInformation($"RunAsync");
 
         // Extract Data
         var textMemory = File
-            .ReadAllText("Data2.txt");
+            .ReadAllText(dataPath);
 
         // Process Data
 
@@ -71,6 +71,6 @@ public class Star2(ILogger<Star2> logger) : IStar
 
         // 100189366
         WriteLine($"Answer: {answer}");
-        return ValueTask.CompletedTask;
+        return ValueTask.FromResult(answer);
     }
 }

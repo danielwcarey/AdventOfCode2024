@@ -3,16 +3,16 @@ using System.Numerics;
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day04;
 
-public class Star1(ILogger<Star1> logger) : IStar
+public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 {
     public string Name { get => "Day04.Star1"; }
 
-    public ValueTask RunAsync()
+    public ValueTask<BigInteger> RunAsync()
     {
         logger.LogInformation($"RunAsync");
 
         // Extract Data
-        var grid = Grid<string>.CreateFromText(File.ReadAllText("Data1.txt"));
+        var grid = Grid<string>.CreateFromText(File.ReadAllText(dataPath));
 
         // Process Data
         List<string> searchText = ["X", "M", "A", "S"];
@@ -24,7 +24,7 @@ public class Star1(ILogger<Star1> logger) : IStar
             (1, -1), (1, 0), (1, 1)
         ];
 
-        BigInteger foundWords = 0;
+        BigInteger answer = 0;
 
         for (var row = 0; row < grid.Rows; row++)
         {
@@ -33,12 +33,12 @@ public class Star1(ILogger<Star1> logger) : IStar
                 if (grid[row, col] != searchText[0]) continue;
 
                 var wordCount = SearchDirections(searchText[1..], directionsToSearch, grid, row, col);
-                foundWords = BigInteger.Add(foundWords, wordCount);
+                answer = BigInteger.Add(answer, wordCount);
             }
         }
         // 2517
-        WriteLine($"Answer: {foundWords}");
-        return ValueTask.CompletedTask;
+        WriteLine($"Answer: {answer}");
+        return ValueTask.FromResult(answer);
     }
 
     public BigInteger SearchDirections(
