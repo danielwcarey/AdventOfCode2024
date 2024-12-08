@@ -130,3 +130,7 @@ will terminate execution.
 
 [LINQPad]( https://www.linqpad.net/ )
 
+[Apis of .NET - System.Collections.Generic]( https://apisof.net/catalog/27f39504fd636cd000067f4478eda8e6 )
+
+[Apis of .NET - System.Collections]( https://apisof.net/catalog/e874655c0d14d5c42c6a42435dcd71dc )
+

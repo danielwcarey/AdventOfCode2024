@@ -55,5 +55,17 @@ public static class Extensions
                     .Select(p => p.Prepend(x))
             );
     }
+
+    public static Stack<TItem> ToStack<TItem>(this IList<TItem> items)
+    {
+        Stack<TItem> result = new();
+
+        foreach (var item in items.Reverse())
+        {
+            result.Push(item);
+        }
+
+        return result;
+    }
 }
 
