@@ -7,73 +7,91 @@ namespace DanielCarey.Shared;
 /// </summary>
 public class Grid<TCell> where TCell : IComparable<TCell>
 {
-    public required BigInteger Rows { get; init; }
-    public required BigInteger Columns { get; init; }
+    public required BigInteger MaxX { get; init; }
+    public required BigInteger MaxY { get; init; }
 
-    private Dictionary<(BigInteger Row, BigInteger Column), TCell> GridData { get; } = new();
+    public Dictionary<Point, TCell> GridData { get; } = new();
 
-    public TCell? this[BigInteger row, BigInteger col]
+    public TCell? this[Point point]
     {
         get
         {
-            if (row < 0 || row >= Rows || col < 0 || col >= Columns)
+            if (point.X < 0 || point.X >= MaxX || point.Y < 0 || point.Y >= MaxY)
             {
                 return default;
             }
-            return GridData[(row, col)];
+            return GridData[point];
         }
         set
         {
             if (value is not null)
             {
-                GridData[(row, col)] = value;
+                GridData[point] = value;
             }
         }
     }
 
-    public bool IsMatch(BigInteger row, BigInteger column, TCell value)
+    public bool IsMatch(Point point, TCell value)
     {
-        var item = this[row, column];
+        var item = this[point];
         if (item == null) return false;
 
         return item.CompareTo(value) == 0;
     }
 
-
     // search but provide a function that indicates if we can stop searching
-    public IEnumerable<(BigInteger Row, BigInteger Column, TCell Value)> Select()
+    public IEnumerable<(Point point, TCell Value)> Select()
     {
-        for (BigInteger row = 0; row < Rows; row++)
+        for (BigInteger y = 0; y < MaxY; y++)
         {
-            for (BigInteger column = 0; column < Columns; column++)
+            for (BigInteger x = 0; x < MaxX; x++)
             {
-                TCell? value = this[row, column];
+                TCell? value = this[new(x, y)];
 
-                if(value is not null) yield return (Row: row, Column: column, Value: value);
+                if (value is not null)
+                {
+                    yield return (new Point(x, y), value);
+                }
             }
+        }
+    }
+
+    public void DrawMap(List<Point> markSpots)
+    {
+        for (var y = 0; y < MaxY; y++)
+        {
+            for (var x = 0; x < MaxX; x++)
+            {
+                var ch = this[new(x, y)] as string;
+
+                var shouldMarkSpot = markSpots.Any(n => n.X == x && n.Y == y);
+                if (shouldMarkSpot) ch = "#";
+
+                Write(ch);
+            }
+            WriteLine();
         }
     }
 
     public static Grid<string> CreateFromText(string text)
     {
         var lines = text.Split(["\r\n"], StringSplitOptions.None);
-        var rows = lines.LongLength;
-        var cols = lines[0].LongCount();
+        var maxY = lines.LongLength;
+        var maxX = lines[0].LongCount();
 
-        var result = new Grid<string>()
+        var result = new Grid<string>
         {
-            Rows = rows,
-            Columns = cols
+            MaxX = maxX,
+            MaxY = maxY
         };
 
-        for (int i = 0; i < rows; i++)
+        for (int y = 0; y < maxY; y++)
         {
-            for (int j = 0; j < cols; j++)
+            for (int x = 0; x < maxX; x++)
             {
-                result[i, j] = lines[i][j].ToString();
+                result[new(x, y)] = lines[y][x].ToString();
             }
         }
-
         return result;
     }
 }

@@ -64,8 +64,51 @@ public static class Extensions
         {
             result.Push(item);
         }
-
         return result;
+    }
+
+    /*
+    ChatGPT Question:
+    using c# and LINQ, i have a list on ints [1, 3, 5, 7, 9, 11, 13, 21, 23]. I need
+    to create a list of unique paris. i also need to create a list of unique triads.
+    give me functions for that.
+    */
+
+    // { 1, 3, 5, 7, 9, 11, 13, 21, 23 }
+    //
+    // numbers.ToUniquePairs() -> { (1, 3), (1, 5), (1, 7), ..., (3, 11), (3, 13), ...(13, 23), (21, 23) }
+    //
+    public static List<(TItem First, TItem Second)> ToUniquePairs<TItem>(this List<TItem> numbers)
+    {
+        return numbers
+            .SelectMany(
+                (x, i) => numbers
+                    .Skip(i + 1),
+                (x, y) => (x, y)
+            )
+            .ToList();
+    }
+
+    // { 1, 3, 5, 7, 9, 11, 13, 21, 23 }
+    //
+    // numbers.ToUniqueTriads -> { (1, 3, 5), (1, 3, 7), (1, 3, 9), ..., (3, 11, 13), (3, 11, 21), ...(11, 21, 23), (13, 21, 23) }
+    //
+    public static List<(TItem First, TItem Second, TItem Third)> ToUniqueTriads<TItem>(this List<TItem> numbers)
+    {
+        // Similar logic to pairs, but extended to three levels:
+        // We take an element x at index i, pair it with y from indices > i,
+        // and then a z from indices > j, ensuring uniqueness.
+        return numbers
+            .SelectMany(
+                (x, i) => numbers
+                    .Skip(i + 1)
+                    .SelectMany(
+                        (y, j) => numbers
+                            .Skip(i + j + 2)
+                            .Select(z => (x, y, z))
+                    )
+            )
+            .ToList();
     }
 }
 

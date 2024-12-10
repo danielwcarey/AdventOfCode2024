@@ -26,11 +26,11 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 
         BigInteger answer = 0;
 
-        for (var row = 0; row < grid.Rows; row++)
+        for (var row = 0; row < grid.MaxY; row++)
         {
-            for (var col = 0; col < grid.Columns; col++)
+            for (var col = 0; col < grid.MaxX; col++)
             {
-                if (grid[row, col] != searchText[0]) continue;
+                if (grid[new(row, col)] != searchText[0]) continue;
 
                 var wordCount = SearchDirections(searchText[1..], directionsToSearch, grid, row, col);
                 answer = BigInteger.Add(answer, wordCount);
@@ -67,7 +67,7 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
         row += direction.X;
         col += direction.Y;
 
-        var nextGridItem = grid[row, col];
+        var nextGridItem = grid[new(row, col)];
 
         if (nextGridItem == null) return 0;
 
