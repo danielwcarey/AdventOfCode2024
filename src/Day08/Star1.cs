@@ -1,7 +1,4 @@
 using System.Numerics;
-using System.Runtime.ExceptionServices;
-
-using static System.Net.Mime.MediaTypeNames;
 
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day08;
@@ -24,19 +21,25 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 
         List<Point> antiNodes = new();
 
+        var convertedGroupings = items
+            .GroupBy(i => i.Value)
+            .Select(g => new { g.Key, Points = g.Select(i => i.point) })
+            .ToList();
+
         // for each unique antennas
-        foreach (var itemGroup in items.GroupBy(i => i.Value))
+        foreach (var itemGroup in convertedGroupings)
         {
-            ProcessItemGroup(itemGroup);
+            ProcessItemGroup(itemGroup.Points);
         }
 
         map.DrawMap(antiNodes);
 
         BigInteger answer = antiNodes.Distinct().Count();
-        WriteLine($"Answer {antiNodes.Count}:{antiNodes.Distinct().Count()}");
+        WriteLine($"Answer {answer}");
+
         return ValueTask.FromResult(answer);
 
-        void ProcessItemGroup(IGrouping<string, (Point point, string Value)> itemGroup)
+        void ProcessItemGroup(IEnumerable<Point> itemGroup)
         {
             // each pair (to form a line)
             foreach (var pair in itemGroup.ToList().ToUniquePairs())
@@ -45,38 +48,46 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
             }
         }
 
-        void ProcessPair((
-            (Point point, string Value) First,
-            (Point point, string Value) Second) pair
-            )
+        void ProcessPair((Point p1, Point p2) pair )
         {
-            var p1 = new Point(pair.First.point.X, pair.First.point.Y);
-            var p2 = new Point(pair.Second.point.X, pair.Second.point.Y);
+            var (p1, p2) = pair;
 
-            var lineSegment = new LineSegment(p1, p2);
+            var dx = BigInteger.Abs(p2.X - p1.X);
+            var dy = BigInteger.Abs(p2.Y - p1.Y);
 
-            var points = lineSegment.GetPointsAtDistance(lineSegment.Distance());
+            Point? p3;
+            Point? p4;
 
-            var l1 = new Point(points[0].X, points[0].Y);
-            var l2 = new Point(points[1].X, points[1].Y);
+            if (p1.X < p2.X)
+            {
+                if (p1.Y < p2.Y)
+                {
+                    p3 = new(p1.X - dx, p1.Y - dy);
+                    p4 = new(p2.X + dx, p2.Y + dy);
+                }
+                else
+                {
+                    p3 = new(p1.X - dx, p1.Y + dy);
+                    p4 = new(p2.X + dx, p2.Y - dy);
+                }
+            }
+            else // p1.X > p2.X
+            {
+                if (p1.Y < p2.Y)
+                {
+                    p3 = new(p1.X + dx, p1.Y - dy);
+                    p4 = new(p2.X - dx, p2.Y + dy);
+                }
+                else
+                {
+                    p3 = new(p1.X + dx, p1.Y + dy);
+                    p4 = new(p2.X - dx, p2.Y - dy);
+                }
+            }
 
-            if (IsInBounds(l1, map)) antiNodes.Add(l1);
-            if (IsInBounds(l2, map)) antiNodes.Add(l2);
+            if (IsInBounds(p3, map)) antiNodes.Add(p3);
+            if (IsInBounds(p4, map)) antiNodes.Add(p4);
 
-            //else // \  
-            //{
-            //    // p1 is top left
-            //    var (p1, p2) = pair switch
-            //    {
-            //        _ when location1.Column < location2.Column => (location1, location2),
-            //        _ => (location2, location1)
-            //    };
-            //    p1 = new(p1.Row - dy, p1.Column - dx);
-            //    p2 = new(p2.Row + dy, p2.Column + dx);
-
-            //    //if (IsInBounds(p1, map)) antiNodes.Add(new(p1.Row, p1.Column));
-            //    //if (IsInBounds(p2, map)) antiNodes.Add(new(p2.Row, p2.Column));
-            //}
         }
     }
     bool IsInBounds(Point point, Grid<string> map)
