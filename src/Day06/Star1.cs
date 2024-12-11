@@ -19,10 +19,10 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
         // guard direction + actions
         List<Guard> guardActions =
         [
-            new("^", new(-1, 0) ),
-            new(">", new (0, 1) ),
-            new("v", new(1, 0) ),
-            new("<", new(0, -1) )
+            new("^", new(0, -1 ) ),
+            new(">", new (1, 0) ),
+            new("v", new(0, 1 ) ),
+            new("<", new(-1, 0 ) )
         ];
 
         // get guard

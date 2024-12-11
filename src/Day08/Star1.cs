@@ -17,7 +17,6 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
         // Process Data
 
         var items = map.Select().Where(i => i.Value != ".");
-        //var items = map.Select().Where(i => i.Value == "A");
 
         List<Point> antiNodes = new();
 
@@ -32,7 +31,7 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
             ProcessItemGroup(itemGroup.Points);
         }
 
-        map.DrawMap(antiNodes);
+        Write(map.CreateMap(antiNodes));
 
         BigInteger answer = antiNodes.Distinct().Count();
         WriteLine($"Answer {answer}");
@@ -89,12 +88,14 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
             if (IsInBounds(p4, map)) antiNodes.Add(p4);
 
         }
+
+        bool IsInBounds(Point point, Grid<string> map)
+        {
+            return point.X >= 0
+                   && point.X < map.MaxX
+                   && point.Y >= 0
+                   && point.Y < map.MaxY;
+        }
     }
-    bool IsInBounds(Point point, Grid<string> map)
-    {
-        return point.X >= 0
-               && point.X < map.MaxX
-               && point.Y >= 0
-               && point.Y < map.MaxY;
-    }
+   
 }

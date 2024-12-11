@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text;
 
 namespace DanielCarey.Shared;
 
@@ -56,8 +57,10 @@ public class Grid<TCell> where TCell : IComparable<TCell>
         }
     }
 
-    public void DrawMap(List<Point> markSpots)
+    public string CreateMap(List<Point> markSpots)
     {
+        StringBuilder sb = new();
+
         for (var y = 0; y < MaxY; y++)
         {
             for (var x = 0; x < MaxX; x++)
@@ -67,15 +70,16 @@ public class Grid<TCell> where TCell : IComparable<TCell>
                 var shouldMarkSpot = markSpots.Any(n => n.X == x && n.Y == y);
                 if (shouldMarkSpot) ch = "#";
 
-                Write(ch);
+                sb.Append(ch);
             }
-            WriteLine();
+            sb.AppendLine();
         }
+        return sb.ToString();
     }
 
     public static Grid<string> CreateFromText(string text)
     {
-        var lines = text.Split(["\r\n"], StringSplitOptions.None);
+        var lines = text.Split(["\r\n"], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         var maxY = lines.LongLength;
         var maxX = lines[0].LongCount();
 
