@@ -20,22 +20,22 @@ public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
 
         BigInteger answer = 0;
 
-        for (var row = 0; row < grid.Rows; row++)
+        for (var row = 0; row < grid.MaxY; row++)
         {
-            for (var col = 0; col < grid.Columns; col++)
+            for (var col = 0; col < grid.MaxX; col++)
             {
                 // A is in the center
-                if (grid[row, col] != "A") continue;
-                
+                if (grid[new(row, col)] != "A") continue;
+
                 // look for MAS, SAM on angle "\"
                 bool angle1 =
-                    (grid[row - 1, col - 1] == "M" && grid[row + 1, col + 1] == "S")
-                    || (grid[row - 1, col - 1] == "S" && grid[row + 1, col + 1] == "M");
+                    (grid[new(row - 1, col - 1)] == "M" && grid[new(row + 1, col + 1)] == "S")
+                    || (grid[new(row - 1, col - 1)] == "S" && grid[new(row + 1, col + 1)] == "M");
 
                 // look for MAS, SAM on angle "/"
                 bool angle2 =
-                    (grid[row - 1, col + 1] == "M" && grid[row + 1, col - 1] == "S")
-                    || (grid[row - 1, col + 1] == "S" && grid[row + 1, col - 1] == "M");
+                    (grid[new(row - 1, col + 1)] == "M" && grid[new(row + 1, col - 1)] == "S")
+                    || (grid[new(row - 1, col + 1)] == "S" && grid[new(row + 1, col - 1)] == "M");
 
                 if (angle1 && angle2)
                 {
