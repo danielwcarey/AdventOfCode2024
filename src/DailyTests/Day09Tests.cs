@@ -19,7 +19,7 @@ public sealed class Day09Tests : BaseTest
 
         var result = await star.RunAsync();
 
-        Assert.IsTrue(result == -1);
+        Assert.IsTrue(result == 6283404590840);
     }
 
     [TestMethod]
