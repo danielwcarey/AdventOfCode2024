@@ -16,13 +16,13 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 
         // Process Data
 
-        var items = map.Select().Where(i => i.Value != ".");
+        var items = map.AsEnumerable().Where(i => i.Value != ".");
 
         List<Point> antiNodes = new();
 
         var convertedGroupings = items
             .GroupBy(i => i.Value)
-            .Select(g => new { g.Key, Points = g.Select(i => i.point) })
+            .Select(g => new { g.Key, Points = g.Select(i => new Point(i.X,i.Y)) })
             .ToList();
 
         // for each unique antennas
