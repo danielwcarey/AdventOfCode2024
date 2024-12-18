@@ -19,7 +19,7 @@ public sealed class Day10Tests : BaseTest
 
         var result = await star.RunAsync();
 
-        Assert.IsTrue(result == -1);
+        Assert.IsTrue(result == 617);
     }
 
     [TestMethod]
@@ -31,7 +31,7 @@ public sealed class Day10Tests : BaseTest
 
         var result = await star.RunAsync();
 
-        Assert.IsTrue(result == -1);
+        Assert.IsTrue(result == 1477);
     }
 }
 
