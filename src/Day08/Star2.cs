@@ -16,16 +16,16 @@ public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
 
         // Process Data
 
-        var items = map.Select().Where(i => i.Value != ".");
+        var items = map.AsEnumerable().Where(i => i.Value != ".");
 
         List<Point> antiNodes = new();
 
-        var antennaGroups = 
+        var antennaGroups =
             items
             .GroupBy(i => i.Value);
-        
+
         var convertedGroupings = antennaGroups
-            .Select(g => new { g.Key, Points = g.Select(i => i.point) })
+            .Select(g => new { g.Key, Points = g.Select(i => new Point(i.X, i.Y)) })
             .ToList();
 
         //BigInteger antiNodeAntennas = 
@@ -42,7 +42,7 @@ public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
         Write(newMap);
 
         var antiNodeAntennas = antiNodeMap
-            .Select()
+            .AsEnumerable()
             .Where(n => n.Value != "." && n.Value != "#")
             .GroupBy(n => n.Value)
             .SelectMany(n => n)
@@ -58,7 +58,7 @@ public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
             var uniquePairs = itemGroup
                 .ToList()
                 .ToUniquePairs();
-            
+
             // each pair (to form a line)
             foreach (var pair in uniquePairs)
             {
@@ -85,7 +85,7 @@ public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
                 {
                     p3 = new(p1.X - dx, p1.Y - dy);
                     p4 = new(p2.X + dx, p2.Y + dy);
-                    
+
                     p3f = p => new(p.X - dx, p.Y - dy);
                     p4f = p => new(p.X + dx, p.Y + dy);
 

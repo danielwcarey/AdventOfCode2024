@@ -27,9 +27,9 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 
         // get guard
         Guard? guard = map
-            .Select() // iterate the map
+            .AsEnumerable() // iterate the map
             .Where(cell => guardActions.Select(g => g.Symbol).Contains(cell.Value)) // find a cell with a guard symbol
-            .Select(cell => new Guard(cell.Value, new(cell.point.X, cell.point.Y))) // create the guard object
+            .Select(cell => new Guard(cell.Value, new(cell.X, cell.Y))) // create the guard object
             .FirstOrDefault();
 
         if (guard is null) throw new Exception("Cannot find the guard");
