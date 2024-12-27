@@ -22,7 +22,7 @@ public class Grid<TValue> where TValue : IComparable<TValue>
     public required BigInteger MaxX { get; init; }
     public required BigInteger MaxY { get; init; }
 
-    public Dictionary<Point, TValue> GridData { get; } = new();
+    public Dictionary<BigIntegerPoint, TValue> GridData { get; } = new();
 
     public TValue? this[BigInteger x, BigInteger y]
     {
@@ -30,7 +30,7 @@ public class Grid<TValue> where TValue : IComparable<TValue>
         set => this[new(x, y)] = value;
     }
 
-    public TValue? this[Point point]
+    public TValue? this[BigIntegerPoint point]
     {
         get
         {
@@ -49,7 +49,7 @@ public class Grid<TValue> where TValue : IComparable<TValue>
         }
     }
 
-    public bool IsMatch(Point point, TValue value)
+    public bool IsMatch(BigIntegerPoint point, TValue value)
     {
         var item = this[point];
         if (item == null) return false;
@@ -105,7 +105,7 @@ public class Grid<TValue> where TValue : IComparable<TValue>
         return sb.ToString();
     }
 
-    public IEnumerable<(Point Point, TValue Value)> Where(Func<TValue, bool> isFound)
+    public IEnumerable<(BigIntegerPoint Point, TValue Value)> Where(Func<TValue, bool> isFound)
     {
         for (var y = 0; y < MaxY; y++)
         {
@@ -121,7 +121,7 @@ public class Grid<TValue> where TValue : IComparable<TValue>
         }
     }
 
-    public string CreateMap(List<Point> markSpots, char? mark = '#')
+    public string CreateMap(List<BigIntegerPoint> markSpots, char? mark = '#')
     {
         StringBuilder sb = new();
 

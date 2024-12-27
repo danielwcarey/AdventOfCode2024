@@ -18,11 +18,11 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 
         var items = map.AsEnumerable().Where(i => i.Value != ".");
 
-        List<Point> antiNodes = new();
+        List<BigIntegerPoint> antiNodes = new();
 
         var convertedGroupings = items
             .GroupBy(i => i.Value)
-            .Select(g => new { g.Key, Points = g.Select(i => new Point(i.X,i.Y)) })
+            .Select(g => new { g.Key, Points = g.Select(i => new BigIntegerPoint(i.X,i.Y)) })
             .ToList();
 
         // for each unique antennas
@@ -38,7 +38,7 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 
         return ValueTask.FromResult(answer);
 
-        void ProcessItemGroup(IEnumerable<Point> itemGroup)
+        void ProcessItemGroup(IEnumerable<BigIntegerPoint> itemGroup)
         {
             // each pair (to form a line)
             foreach (var pair in itemGroup.ToList().ToUniquePairs())
@@ -47,15 +47,15 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
             }
         }
 
-        void ProcessPair((Point p1, Point p2) pair )
+        void ProcessPair((BigIntegerPoint p1, BigIntegerPoint p2) pair )
         {
             var (p1, p2) = pair;
 
             var dx = BigInteger.Abs(p2.X - p1.X);
             var dy = BigInteger.Abs(p2.Y - p1.Y);
 
-            Point? p3;
-            Point? p4;
+            BigIntegerPoint? p3;
+            BigIntegerPoint? p4;
 
             if (p1.X < p2.X)
             {
@@ -89,7 +89,7 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 
         }
 
-        bool IsInBounds(Point point, Grid<string> map)
+        bool IsInBounds(BigIntegerPoint point, Grid<string> map)
         {
             return point.X >= 0
                    && point.X < map.MaxX

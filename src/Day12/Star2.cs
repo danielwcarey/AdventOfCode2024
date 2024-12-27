@@ -13,6 +13,8 @@ public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
     {
         logger.LogInformation($"RunAsync");
 
+        throw new NotImplementedException("Coming back to star 2");
+
         // Extract Data
         var records =
             FileReadAllLines(dataPath)

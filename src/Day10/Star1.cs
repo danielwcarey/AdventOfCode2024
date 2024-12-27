@@ -3,7 +3,7 @@ using System.Numerics;
 // ReSharper disable once CheckNamespace
 namespace DanielCarey.Day10;
 
-public record Cell(Point Point, string Value);
+public record Cell(BigIntegerPoint Point, string Value);
 
 
 public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
@@ -43,12 +43,12 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
                 continue;
             }
 
-            List<Point> nextPoints = [
+            List<BigIntegerPoint> nextPoints = [
                 point with { Y = point.Y-1 }, point with { Y = point.Y+1 },
                 point with { X = point.X-1 }, point with { X = point.X+1 }
             ];
 
-            foreach (Point nextPoint in nextPoints)
+            foreach (BigIntegerPoint nextPoint in nextPoints)
             {
                 if (grid[nextPoint] == nextValue) trails.Push([.. trail, new Cell(nextPoint, nextValue)]);
             }

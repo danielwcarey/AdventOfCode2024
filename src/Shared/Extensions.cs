@@ -1,10 +1,13 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
 
+// When using range function, use it with
+// using static DanielCarey.Shared.Extensions;
+
 namespace DanielCarey.Shared;
 
 // Helper methods and extensions
-public static class Extensions
+public static partial class Extensions
 {
     private static readonly Regex FixSpaces = new(@"\s\s*");
 
@@ -82,8 +85,7 @@ public static class Extensions
     {
         return numbers
             .SelectMany(
-                (x, i) => numbers
-                    .Skip(i + 1),
+                (_, i) => numbers.Skip(i + 1),
                 (x, y) => (x, y)
             )
             .ToList();
@@ -110,5 +112,31 @@ public static class Extensions
             )
             .ToList();
     }
+
+
+    #region range - like python
+
+    // ReSharper disable once UnusedMember.Global
+    // ReSharper disable once InconsistentNaming
+    public static IEnumerable<BigInteger> range(BigInteger? stop = null)
+    {
+        int i = 0;
+        while (stop == null || i < stop) yield return i++;
+    }
+
+    // ReSharper disable once UnusedMember.Global
+    // ReSharper disable once InconsistentNaming
+    public static IEnumerable<BigInteger> range(BigInteger start, BigInteger stop, BigInteger? step = null)
+    {
+        step ??= new BigInteger(1);
+        BigInteger i = start;
+        while (i < stop)
+        {
+            yield return i;
+            i = BigInteger.Add(i, step.Value);
+        }
+    }
+
+    #endregion
 }
 
