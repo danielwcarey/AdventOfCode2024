@@ -7,7 +7,7 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 {
     public string Name { get => "Day06.Star1"; }
 
-    record Guard(string Symbol, Point Point);
+    record Guard(string Symbol, BigIntegerPoint Point);
 
     public ValueTask<BigInteger> RunAsync()
     {
@@ -35,7 +35,7 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
         if (guard is null) throw new Exception("Cannot find the guard");
 
         // Process Data
-        List<Point> guardHistory = new();
+        List<BigIntegerPoint> guardHistory = new();
         bool guardInArea = true;
         guardHistory.Add(new(guard.Point.X, guard.Point.Y));
 
@@ -66,7 +66,7 @@ public class Star1(ILogger<Star1> logger, string dataPath = "Data1.txt") : IStar
 
             if (guardInArea)
             {
-                Point point = new(guard.Point.X, guard.Point.Y);
+                BigIntegerPoint point = new(guard.Point.X, guard.Point.Y);
                 if (!guardHistory.Contains(point)) // don't recount 
                 {
                     guardHistory.Add(point);

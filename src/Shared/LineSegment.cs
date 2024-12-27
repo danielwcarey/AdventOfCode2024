@@ -3,7 +3,7 @@
 namespace DanielCarey.Shared;
 
 
-public class LineSegment(Point p1, Point p2)
+public class LineSegment(BigIntegerPoint p1, BigIntegerPoint p2)
 {
     public BigInteger X1 { get; } = p1.X;
     public BigInteger Y1 { get; } = p1.Y;
@@ -20,7 +20,7 @@ public class LineSegment(Point p1, Point p2)
         return new BigInteger(Math.Sqrt((double)(dx * dx + dy * dy)));
     }
 
-    public Point[] GetPointsAtDistance(BigInteger distance)
+    public BigIntegerPoint[] GetPointsAtDistance(BigInteger distance)
     {
         // Calculate the direction vector
         BigInteger dx = X2 - X1;

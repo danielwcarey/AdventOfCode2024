@@ -42,12 +42,12 @@ public class Star2(ILogger<Star2> logger, string dataPath = "Data2.txt") : IStar
                 continue;
             }
 
-            List<Point> nextPoints = [
+            List<BigIntegerPoint> nextPoints = [
                 point with { Y = point.Y-1 }, point with { Y = point.Y+1 },
                 point with { X = point.X-1 }, point with { X = point.X+1 }
             ];
 
-            foreach (Point nextPoint in nextPoints)
+            foreach (BigIntegerPoint nextPoint in nextPoints)
             {
                 if (grid[nextPoint] == nextValue) trails.Push([.. trail, new Cell(nextPoint, nextValue)]);
             }
